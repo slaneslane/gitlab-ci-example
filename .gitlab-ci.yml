@@ -32,9 +32,9 @@ variables:
 
 build website:
   stage: build
-  only:
-    - master
-    - merge_requests
+#  only:
+#    - master
+#    - merge_requests
   except:
     - schedules
   script:
