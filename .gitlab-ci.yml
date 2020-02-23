@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - deploy
+  - deployment-test
 
 build website:
   stage: build
@@ -36,3 +37,9 @@ deploy to surge:
     - npm install -g surge
     - surge --project ./public --domain bubblespot.surge.sh
       
+test deployment:
+  image: alpine
+  stage: deployment-test
+  script:
+    - apk add curl
+    - curl "http://bubblespot.surge.sh" | tac | tac | grep -q "Gatsby"
