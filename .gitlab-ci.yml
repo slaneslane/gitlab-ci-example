@@ -81,6 +81,7 @@ deploy production:
   environment:
     name: production
     url: http://$PRODUCTION_DOMAIN
+  when: manual
   except:
     - schedules
   cache: {}
