@@ -1,9 +1,11 @@
+image: node
+
 stages:
   - build
   - test
+  - deploy
 
 build website:
-  image: node
   stage: build
   script:
     - npm install
@@ -20,7 +22,6 @@ test artifact:
     - grep -q "Gatsby" ./public/index.html
 
 test website:
-  image: node
   stage: test
   script:
     - npm install
@@ -28,3 +29,10 @@ test website:
     - gatsby serve &
     - sleep 3
     - curl "http://localhost:9000" | tac | tac | grep -q "Gatsby"
+
+deploy to surge:
+  stage: deploy
+  script:
+    - npm install -g surge
+    - surge --project ./public --domain bubblespot.surge.sh
+      
