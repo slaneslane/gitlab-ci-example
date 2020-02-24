@@ -99,33 +99,34 @@ stop review:
     - surge teardown bubblespot-$CI_ENVIRONMENT_SLUG.surge.sh
   when: manual
 
+.deploy_template: &deploy
+  only:
+    - master
+  cache: {}
+  before_script:
+    - npm install -g surge
+  script:
+    - surge --project ./public --domain $DOMAIN
+  environment:
+    url: http://$DOMAIN
+
 deploy staging:
+  <<: *deploy
   stage: deploy staging
+  variables:
+    DOMAIN: $STAGING_DOMAIN
   environment:
     name: staging
-    url: http://$STAGING_DOMAIN
-  only:
-    - master
-  cache: {}
-  before_script:
-    - npm install -g surge
-  script:
-    - surge --project ./public --domain $STAGING_DOMAIN
 
 deploy production:
+  <<: *deploy
   stage: deploy production
+  variables:
+    DOMAIN: $PRODUCTION_DOMAIN
   environment:
     name: production
-    url: http://$PRODUCTION_DOMAIN
-  only:
-    - master
   #when: manual
   #allow_failure: false
-  cache: {}
-  before_script:
-    - npm install -g surge
-  script:
-    - surge --project ./public --domain $PRODUCTION_DOMAIN
       
 production tests:
   image: alpine
